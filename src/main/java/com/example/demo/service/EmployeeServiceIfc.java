@@ -13,8 +13,10 @@ public interface EmployeeServiceIfc {
 	ApiResponce getAll();
 
 	ApiResponce getById(String id);
+	
+	ApiResponce getByName(String name);
 
-	ApiResponce updateEmployee(EmployeeDto employeeDto);
+	ApiResponce updateEmployee(String id,EmployeeDto employeeDto);
 
 	ApiResponce delete(String id);
 	

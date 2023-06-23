@@ -14,7 +14,7 @@ import com.example.demo.repository.EmployeeRepository;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeServiceIfc {
-	private static final Logger LOGGER= LoggerFactory.getLogger(EmployeeServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 	@Autowired
 	EmployeeRepository employeeRepository;
 
@@ -31,12 +31,12 @@ public class EmployeeServiceImpl implements EmployeeServiceIfc {
 				employee.setMobileNo(employeeDto.getMobileNo());
 				employee.setEmail(employeeDto.getEmail());
 				employeeRepository.save(employee);
-				//System.out.println("Employee add the data successfull");
+				// System.out.println("Employee add the data successfull");
 				LOGGER.trace("Employee add the data successfull");
 				return new ApiResponce("Employee add data successfull", true, employee);
 
 			} else {
-				return new ApiResponce("Employee not add datd successfull", false, null);
+				return new ApiResponce("Employee not Add Data", false, null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,14 +47,15 @@ public class EmployeeServiceImpl implements EmployeeServiceIfc {
 
 	public ApiResponce getAll() {
 		List<Employee> employees = employeeRepository.findAll();
-	
+
 		return new ApiResponce("Get The all user data successfully", true, employees);
-		
+
 	}
 
 	public ApiResponce getById(String id) {
 		try {
-			Employee employee = employeeRepository.findbyEmployeeId(id);
+			//Employee employee = employeeRepository.findByEmployeeId(id);
+			Employee employee=employeeRepository.findById(id).get();
 			if (employee != null) {
 				return new ApiResponce("Get by user id succefull", true, employee);
 			} else {
@@ -63,21 +64,40 @@ public class EmployeeServiceImpl implements EmployeeServiceIfc {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ApiResponce("Id is not deleted", false, null);
+			return new ApiResponce(e.getMessage(), false, null);
 		}
 
 	}
 
 	@Override
-	public ApiResponce updateEmployee(EmployeeDto employeeDto) {
+	public ApiResponce getByName(String name) {
+		try {
+			Employee employee = employeeRepository.findByFirstName(name);
+
+			if (employee != null) {
+				return new ApiResponce("Get By UserName Successful", true, employee);
+			} else {
+				return new ApiResponce("Username not Found", false, null);
+			}
+
+		} catch (Exception e) {
+			return new ApiResponce(e.getMessage(), false, name);
+		}
+
+	}
+
+	@Override
+	public ApiResponce updateEmployee( String id,EmployeeDto employeeDto) {
 		try {
 			if (employeeDto != null) {
 
-				Employee employee = employeeRepository.findbyEmployeeId(employeeDto.getId());
+				//Employee employee = employeeRepository.findByEmployeeId(employeeDto.getId()); //Native Query Method  this is use for SQL Data Base
+				Employee employee=employeeRepository.findById(id).get();
 				if (employee != null) {
 					employee.setEmail(employeeDto.getEmail());
 					employee.setFirstName(employeeDto.getFirstName());
-					employee.setId(employeeDto.getId());
+					employee.setEmpId(employeeDto.getEmpId());
+					//employee.setId(employeeDto.getId());
 					employee.setLastName(employeeDto.getLastName());
 					employee.setMobileNo(employeeDto.getMobileNo());
 					employeeRepository.save(employee);

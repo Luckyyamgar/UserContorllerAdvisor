@@ -8,6 +8,7 @@ public class UserCrudeOpratioApplication {
 
 	public static void main(String[] args) {
 		//SpringApplication.run(UserCrudeOpratioApplication.class, args);
+		
 		SpringApplication.run(UserCrudeOpratioApplication.class, args);
 	}
 
